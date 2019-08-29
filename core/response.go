@@ -30,14 +30,26 @@ func (r *Response) SendNoContent() {
 	encodeJSON(r.ResponseWriter, nil)
 }
 
+type badRequestMessage struct {
+	Message string `json:"message"`
+}
+
 // SendBadRequest ...
 func (r *Response) SendBadRequest(message string) {
-	http.Error(r.ResponseWriter, message, http.StatusBadRequest)
+	badMessage := badRequestMessage{Message: message}
+	messageJSON, _ := json.Marshal(badMessage)
+	http.Error(r.ResponseWriter, string(messageJSON), http.StatusBadRequest)
+}
+
+type notFoundMessage struct {
+	Message string `json:"message"`
 }
 
 // SendNotFound ...
 func (r *Response) SendNotFound() {
-	http.Error(r.ResponseWriter, "Not Found", http.StatusNotFound)
+	notFoundMessage := notFoundMessage{Message: "Not found"}
+	messageJSON, _ := json.Marshal(notFoundMessage)
+	http.Error(r.ResponseWriter, string(messageJSON), http.StatusNotFound)
 }
 
 // SendNotImplemented ...

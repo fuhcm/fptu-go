@@ -16,8 +16,13 @@ func NewRouter() *mux.Router {
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFound)
 
 	router.Methods("GET").Path("/").HandlerFunc(handlers.GetInfo)
-	router.Methods("GET").Path("/test").HandlerFunc(handlers.CreateNewUser)
-	router.Methods("GET").Path("/read").HandlerFunc(handlers.ReadUsers)
+
+	// Authenticate
+	router.Methods("POST").Path("/auth").HandlerFunc(handlers.TokenAuthenticate)
+
+	// Testing routes
+	router.Methods("GET").Path("/test/write").HandlerFunc(handlers.CreateNewUser)
+	router.Methods("GET").Path("/test/read").HandlerFunc(handlers.ReadUsers)
 
 	return router
 }
