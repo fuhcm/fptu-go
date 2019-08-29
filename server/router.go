@@ -18,7 +18,8 @@ func NewRouter() *mux.Router {
 	router.Methods("GET").Path("/").HandlerFunc(handlers.GetInfo)
 
 	// Authenticate
-	router.Methods("POST").Path("/auth").HandlerFunc(handlers.TokenAuthenticate)
+	router.Methods("POST").Path("/auth").HandlerFunc(handlers.UsernamePasswordAuthenticate)
+	router.Methods("POST").Path("/auth/oauth").HandlerFunc(handlers.TokenAuthenticate)
 
 	// Testing routes
 	router.Methods("GET").Path("/test/write").HandlerFunc(handlers.CreateNewUser)
