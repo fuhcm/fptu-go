@@ -54,7 +54,7 @@ func UsernamePasswordAuthenticate(w http.ResponseWriter, r *http.Request) {
 
 		claims := &jwt.StandardClaims{
 			ExpiresAt: 15000,
-			Issuer:    "test",
+			Issuer:    "admin",
 		}
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

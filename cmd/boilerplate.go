@@ -3,8 +3,10 @@ package main
 import (
 	"boilerplate/db"
 	"boilerplate/server"
+	"os"
 
-	_ "github.com/go-sql-driver/mysql" // MySQL Driver
+	_ "github.com/go-sql-driver/mysql"    // MySQL Driver
+	_ "github.com/joho/godotenv/autoload" // env Load
 )
 
 func main() {
@@ -12,5 +14,5 @@ func main() {
 	defer db.DB.Close()
 
 	server := server.NewServer()
-	server.Run(":5000")
+	server.Run(":" + os.Getenv("PORT"))
 }
