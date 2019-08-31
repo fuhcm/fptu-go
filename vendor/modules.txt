@@ -1,0 +1,26 @@
+# github.com/auth0/go-jwt-middleware v0.0.0-20190805220309-36081240882b
+github.com/auth0/go-jwt-middleware
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+github.com/dgrijalva/jwt-go
+# github.com/go-sql-driver/mysql v1.4.1
+github.com/go-sql-driver/mysql
+# github.com/gorilla/mux v1.7.3
+github.com/gorilla/mux
+# github.com/jmoiron/sqlx v1.2.0
+github.com/jmoiron/sqlx
+github.com/jmoiron/sqlx/reflectx
+# github.com/joho/godotenv v1.3.0
+github.com/joho/godotenv/autoload
+github.com/joho/godotenv
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/phyber/negroni-gzip v0.0.0-20180113114010-ef6356a5d029
+github.com/phyber/negroni-gzip/gzip
+# github.com/sirupsen/logrus v1.4.2
+github.com/sirupsen/logrus
+# github.com/urfave/negroni v1.0.0
+github.com/urfave/negroni
+# golang.org/x/sys v0.0.0-20190606165138-5da285871e9c
+golang.org/x/sys/unix
+# google.golang.org/appengine v1.6.2
+google.golang.org/appengine/cloudsql
