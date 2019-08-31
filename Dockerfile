@@ -8,7 +8,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/boilerplate.go
 
 FROM alpine
 
@@ -16,8 +16,8 @@ RUN apk add ca-certificates rsync openssh
 
 WORKDIR /root/src/go
 
-COPY --from=builder /root/src/go/main /root/src/go/main
+COPY --from=builder /root/src/go/boilerplate /root/src/go/boilerplate
 
 EXPOSE 5000
 
-ENTRYPOINT ["./main"]
+ENTRYPOINT ["./boilerplate"]

@@ -1,0 +1,20 @@
+version: "3.4"
+services:
+  db:
+    image: mariadb:10
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=golang
+      - MYSQL_DATABASE=boierlplate
+      - MYSQL_USER=golang
+      - MYSQL_PASSWORD=golang
+  web:
+    build: .
+    image: go-boierlplate
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      DB: "golang:golang@tcp(db)/boierlplate?charset=utf8&parseTime=True"
+      PORT: 5000
