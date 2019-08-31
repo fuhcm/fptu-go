@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5000
 
-ENTRYPOINT ["go","run","main.go"]
+ENTRYPOINT ["go","run","cmd/boilerplate.go"]
