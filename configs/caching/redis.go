@@ -1,4 +1,4 @@
-package sentry
+package caching
 
 // Init ...
 func Init() string {
