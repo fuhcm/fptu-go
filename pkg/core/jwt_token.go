@@ -1,7 +1,7 @@
 package core
 
 import (
-	"fptugo/models"
+	"fptugo/internal/models"
 	"os"
 
 	"github.com/dgrijalva/jwt-go"

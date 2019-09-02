@@ -5,8 +5,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"fptugo/handlers"
-	"fptugo/websocket"
+	"fptugo/internal/handlers"
+	"fptugo/pkg/websocket"
 )
 
 // NewRouter ...

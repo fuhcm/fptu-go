@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"fptugo/core"
-	"fptugo/db"
-	"fptugo/models"
+	"fptugo/pkg/core"
+	"fptugo/configs/db"
+	"fptugo/internal/models"
 
 	"golang.org/x/crypto/bcrypt"
 )

@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fptugo/core"
-	"fptugo/db"
-	"fptugo/models"
+	"fptugo/pkg/core"
+	"fptugo/configs/db"
+	"fptugo/internal/models"
 	"net/http"
 )
 

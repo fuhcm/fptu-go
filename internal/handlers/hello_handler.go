@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"fptugo/core"
+	"fptugo/pkg/core"
 )
 
 // Info ...
