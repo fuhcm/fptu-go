@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"fptugo/handlers"
+	"fptugo/websocket"
 )
 
 // NewRouter ...
@@ -14,6 +15,13 @@ func NewRouter() *mux.Router {
 
 	// Handle 404
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFound)
+
+	// Handle websocket
+	hub := websocket.NewHub()
+	go hub.Run()
+	router.Path("/ws").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		websocket.ServeWs(hub, w, r)
+	})
 
 	router.Methods("GET").Path("/").HandlerFunc(handlers.GetInfo)
 
