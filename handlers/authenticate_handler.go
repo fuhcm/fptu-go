@@ -1,15 +1,18 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"boilerplate/core"
+	"boilerplate/db"
+	"boilerplate/models"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/sirupsen/logrus"
+	"golang.org/x/crypto/bcrypt"
 )
 
-type authenticateBody struct {
+// AuthenticateBody ...
+type AuthenticateBody struct {
 	Token string `json:"token"`
 }
 
@@ -18,11 +21,11 @@ func TokenAuthenticate(w http.ResponseWriter, r *http.Request) {
 	req := core.Request{ResponseWriter: w, Request: r}
 	res := core.Response{ResponseWriter: w}
 
-	authenticateBody := new(authenticateBody)
-	req.GetJSONBody(&authenticateBody)
+	AuthenticateBody := new(AuthenticateBody)
+	req.GetJSONBody(&AuthenticateBody)
 
 	googleAuthURL := "https://www.googleapis.com/userinfo/v2/me"
-	statusCode, body := core.HTTPGet(googleAuthURL, authenticateBody.Token)
+	statusCode, body := core.HTTPGet(googleAuthURL, AuthenticateBody.Token)
 
 	if statusCode != 200 {
 		res.SendBadRequest("Unauthorized")
@@ -32,12 +35,28 @@ func TokenAuthenticate(w http.ResponseWriter, r *http.Request) {
 	res.SendOK(body)
 }
 
-type usernamePasswordBody struct {
-	Username string `json:"username"`
+func comparePasswords(hashedPwd string, plainPwdStr string) bool {
+	// Since we'll be getting the hashed password from the DB it
+	// will be a string so we'll need to convert it to a byte slice
+	plainPwd := []byte(plainPwdStr)
+	byteHash := []byte(hashedPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	return true
+}
+
+// UsernamePasswordBody ...
+type UsernamePasswordBody struct {
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-type authenticateResponseBody struct {
+// AuthenticateResponseBody ...
+type AuthenticateResponseBody struct {
 	Token string `json:"token"`
 }
 
@@ -46,26 +65,27 @@ func UsernamePasswordAuthenticate(w http.ResponseWriter, r *http.Request) {
 	req := core.Request{ResponseWriter: w, Request: r}
 	res := core.Response{ResponseWriter: w}
 
-	usernamePasswordBody := new(usernamePasswordBody)
+	usernamePasswordBody := new(UsernamePasswordBody)
 	req.GetJSONBody(&usernamePasswordBody)
 
-	if usernamePasswordBody.Username == "admin" && usernamePasswordBody.Password == "admin" {
-		mySigningKey := []byte("tuhm")
-
-		claims := &jwt.StandardClaims{
-			ExpiresAt: 15000,
-			Issuer:    "admin",
-		}
-
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		signed, err := token.SignedString(mySigningKey)
-		if err != nil {
-			logrus.Fatal(err)
-		}
-
-		res.SendOK(authenticateResponseBody{Token: signed})
+	var foundUser models.User
+	err := db.DB.QueryRowx("SELECT name, email, password, level FROM users WHERE email = ?", usernamePasswordBody.Email).StructScan(&foundUser)
+	if err != nil {
+		res.SendBadRequest("Email not found")
 		return
 	}
 
-	res.SendBadRequest("Unauthorized")
+	isPasswordValid := comparePasswords(foundUser.Password, usernamePasswordBody.Password)
+	if isPasswordValid == true {
+		token, err := core.CreateJWTToken(foundUser)
+		if err != nil {
+			res.SendBadRequest(err.Error())
+			return
+		}
+
+		res.SendOK(AuthenticateResponseBody{Token: token})
+		return
+	}
+
+	res.SendBadRequest("Wrong authentication")
 }
