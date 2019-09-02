@@ -1,6 +1,8 @@
 package db
 
 import (
+	"os"
+
 	"github.com/jmoiron/sqlx"
 )
 
@@ -9,7 +11,7 @@ var DB *sqlx.DB
 
 // InitDB ...
 func InitDB() {
-	dbConn, err := sqlx.Connect("mysql", "root:12345678@tcp(127.0.0.1:3306)/go_test?charset=utf8&parseTime=True")
+	dbConn, err := sqlx.Connect("mysql", os.Getenv("DB"))
 	if err != nil {
 		panic(err.Error())
 	}
