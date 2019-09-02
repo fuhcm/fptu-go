@@ -25,5 +25,8 @@ func NewRouter() *mux.Router {
 	// Users
 	router.Methods("GET").Path("/users").HandlerFunc(handlers.ListUsers)
 
+	// Confession
+	router.Methods("GET").Path("/confessions").HandlerFunc(handlers.ListConfessions)
+
 	return router
 }
