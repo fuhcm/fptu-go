@@ -1,4 +1,4 @@
-package caching
+package redis
 
 // Init ...
 func Init() string {
