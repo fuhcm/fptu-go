@@ -20,10 +20,10 @@ func NewRouter() *mux.Router {
 	// Authenticate
 	router.Methods("POST").Path("/auth").HandlerFunc(handlers.UsernamePasswordAuthenticate)
 	router.Methods("POST").Path("/auth/oauth").HandlerFunc(handlers.TokenAuthenticate)
+	router.Methods("POST").Path("/auth/new").HandlerFunc(handlers.CreateNewUser)
 
-	// Testing routes
-	router.Methods("GET").Path("/test/write").HandlerFunc(handlers.CreateNewUser)
-	router.Methods("GET").Path("/test/read").HandlerFunc(handlers.ReadUsers)
+	// Users
+	router.Methods("GET").Path("/users").HandlerFunc(handlers.ListUsers)
 
 	return router
 }

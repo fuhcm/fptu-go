@@ -40,8 +40,8 @@ func CreateNewUser(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// ReadUsers ...
-func ReadUsers(w http.ResponseWriter, r *http.Request) {
+// ListUsers ...
+func ListUsers(w http.ResponseWriter, r *http.Request) {
 	res := core.Response{ResponseWriter: w}
 
 	users := []models.User{}
