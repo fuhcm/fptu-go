@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"boilerplate/core"
-	"boilerplate/db"
-	"boilerplate/models"
+	"fptugo/core"
+	"fptugo/db"
+	"fptugo/models"
 
 	"golang.org/x/crypto/bcrypt"
 )

@@ -1,5 +1,5 @@
 build/
 .env
-boilerplate
+main
 tmp
 air.conf

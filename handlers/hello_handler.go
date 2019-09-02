@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"boilerplate/core"
+	"fptugo/core"
 )
 
 // Info ...
@@ -16,7 +16,7 @@ type Info struct {
 func GetInfo(w http.ResponseWriter, r *http.Request) {
 	res := core.Response{ResponseWriter: w}
 	res.SendOK(Info{
-		Name:    "boilerplate",
+		Name:    "fptugo",
 		Version: "0.0.0",
 	})
 }

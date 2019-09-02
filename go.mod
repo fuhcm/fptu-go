@@ -1,4 +1,4 @@
-module boilerplate
+module fptugo
 
 go 1.12
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"boilerplate/handlers"
+	"fptugo/handlers"
 )
 
 // NewRouter ...

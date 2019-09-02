@@ -1,4 +1,4 @@
-# Go RESTful Boilerplate
+# FPTU Go
 
 Updating
 

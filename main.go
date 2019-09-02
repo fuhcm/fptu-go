@@ -1,8 +1,8 @@
 package main
 
 import (
-	"boilerplate/db"
-	"boilerplate/server"
+	"fptugo/db"
+	"fptugo/server"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"    // MySQL Driver

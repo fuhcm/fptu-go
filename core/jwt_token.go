@@ -1,7 +1,7 @@
 package core
 
 import (
-	"boilerplate/models"
+	"fptugo/models"
 	"os"
 
 	"github.com/dgrijalva/jwt-go"
