@@ -1,6 +1,8 @@
 package server
 
 import (
+	"fptugo/internal/router"
+
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urfave/negroni"
 )
@@ -12,7 +14,7 @@ func NewServer() *negroni.Negroni {
 	server.Use(gzip.Gzip(gzip.DefaultCompression))
 	// server.Use(middlewares.JWTMiddleware())
 
-	server.UseHandler(NewRouter())
+	server.UseHandler(router.NewRouter())
 
 	return server
 }

@@ -1,4 +1,4 @@
-package models
+package confession
 
 import "time"
 

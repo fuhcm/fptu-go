@@ -1,12 +1,12 @@
-package handlers
+package authen
 
 import (
 	"log"
 	"net/http"
 
-	"fptugo/pkg/core"
 	"fptugo/configs/db"
-	"fptugo/internal/models"
+	"fptugo/internal/user"
+	"fptugo/pkg/core"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -68,7 +68,7 @@ func UsernamePasswordAuthenticate(w http.ResponseWriter, r *http.Request) {
 	usernamePasswordBody := new(UsernamePasswordBody)
 	req.GetJSONBody(&usernamePasswordBody)
 
-	var foundUser models.User
+	var foundUser user.User
 	err := db.DB.QueryRowx("SELECT name, email, password, level FROM users WHERE email = ?", usernamePasswordBody.Email).StructScan(&foundUser)
 	if err != nil {
 		res.SendBadRequest("Email not found")
@@ -77,7 +77,7 @@ func UsernamePasswordAuthenticate(w http.ResponseWriter, r *http.Request) {
 
 	isPasswordValid := comparePasswords(foundUser.Password, usernamePasswordBody.Password)
 	if isPasswordValid == true {
-		token, err := core.CreateJWTToken(foundUser)
+		token, err := core.CreateJWTToken(foundUser.Email)
 		if err != nil {
 			res.SendBadRequest(err.Error())
 			return

@@ -1,9 +1,8 @@
-package handlers
+package confession
 
 import (
-	"fptugo/pkg/core"
 	"fptugo/configs/db"
-	"fptugo/internal/models"
+	"fptugo/pkg/core"
 	"net/http"
 )
 
@@ -11,7 +10,7 @@ import (
 func ListConfessions(w http.ResponseWriter, r *http.Request) {
 	res := core.Response{ResponseWriter: w}
 
-	confessions := []models.Confession{}
+	confessions := []Confession{}
 	db.DB.Select(&confessions, "SELECT id, content, sender, approver, reason, created_at, updated_at FROM users")
 
 	res.SendOK(confessions)

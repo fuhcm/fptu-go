@@ -1,12 +1,11 @@
-package handlers
+package user
 
 import (
 	"fmt"
 	"net/http"
 
-	"fptugo/pkg/core"
 	"fptugo/configs/db"
-	"fptugo/internal/models"
+	"fptugo/pkg/core"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,7 +20,7 @@ func CreateNewUser(w http.ResponseWriter, r *http.Request) {
 	req := core.Request{ResponseWriter: w, Request: r}
 	res := core.Response{ResponseWriter: w}
 
-	newUser := new(models.User)
+	newUser := new(User)
 	req.GetJSONBody(&newUser)
 
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
@@ -44,7 +43,7 @@ func CreateNewUser(w http.ResponseWriter, r *http.Request) {
 func ListUsers(w http.ResponseWriter, r *http.Request) {
 	res := core.Response{ResponseWriter: w}
 
-	users := []models.User{}
+	users := []User{}
 	db.DB.Select(&users, "SELECT name, email, password, level FROM users")
 
 	res.SendOK(users)

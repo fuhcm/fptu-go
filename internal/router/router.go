@@ -1,11 +1,14 @@
-package server
+package router
 
 import (
 	"net/http"
 
 	"github.com/gorilla/mux"
 
+	"fptugo/internal/authen"
+	"fptugo/internal/confession"
 	"fptugo/internal/handlers"
+	"fptugo/internal/user"
 	"fptugo/pkg/websocket"
 )
 
@@ -26,15 +29,15 @@ func NewRouter() *mux.Router {
 	router.Methods("GET").Path("/").HandlerFunc(handlers.GetInfo)
 
 	// Authenticate
-	router.Methods("POST").Path("/auth").HandlerFunc(handlers.UsernamePasswordAuthenticate)
-	router.Methods("POST").Path("/auth/oauth").HandlerFunc(handlers.TokenAuthenticate)
-	router.Methods("POST").Path("/auth/new").HandlerFunc(handlers.CreateNewUser)
+	router.Methods("POST").Path("/auth").HandlerFunc(authen.UsernamePasswordAuthenticate)
+	router.Methods("POST").Path("/auth/oauth").HandlerFunc(authen.TokenAuthenticate)
+	router.Methods("POST").Path("/auth/new").HandlerFunc(user.CreateNewUser)
 
 	// Users
-	router.Methods("GET").Path("/users").HandlerFunc(handlers.ListUsers)
+	router.Methods("GET").Path("/users").HandlerFunc(user.ListUsers)
 
 	// Confession
-	router.Methods("GET").Path("/confessions").HandlerFunc(handlers.ListConfessions)
+	router.Methods("GET").Path("/confessions").HandlerFunc(confession.ListConfessions)
 
 	return router
 }
