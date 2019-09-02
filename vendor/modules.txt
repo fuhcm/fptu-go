@@ -20,6 +20,9 @@ github.com/phyber/negroni-gzip/gzip
 github.com/sirupsen/logrus
 # github.com/urfave/negroni v1.0.0
 github.com/urfave/negroni
+# golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
 # golang.org/x/sys v0.0.0-20190606165138-5da285871e9c
 golang.org/x/sys/unix
 # google.golang.org/appengine v1.6.2
