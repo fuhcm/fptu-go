@@ -9,6 +9,7 @@ import (
 
 	"fptugo/internal/user"
 	"fptugo/pkg/core"
+	googleoauth "fptugo/third_party/google_oauth"
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
@@ -111,10 +112,8 @@ func LoginHandlerWithoutPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	googleAuthURL := "https://www.googleapis.com/userinfo/v2/me"
-	statusCode, _ := core.HTTPGet(googleAuthURL, authParams.Token)
-
-	if statusCode != 200 {
+	err := googleoauth.VerifyGoogleOAuth(authParams.Token)
+	if err != nil {
 		res.SendBadRequest("Token Unauthorized")
 		return
 	}
