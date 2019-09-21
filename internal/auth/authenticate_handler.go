@@ -18,6 +18,7 @@ import (
 type Params struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Token    string `json:"token"`
 }
 
 // Response ...
@@ -110,6 +111,14 @@ func LoginHandlerWithoutPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	googleAuthURL := "https://www.googleapis.com/userinfo/v2/me"
+	statusCode, _ := core.HTTPGet(googleAuthURL, authParams.Token)
+
+	if statusCode != 200 {
+		res.SendBadRequest("Token Unauthorized")
+		return
+	}
+
 	mySigningKey := []byte(os.Getenv("JWT_SECRET"))
 	expireTime := time.Now().Add(time.Hour * 24 * 3).Unix()
 
@@ -117,6 +126,7 @@ func LoginHandlerWithoutPassword(w http.ResponseWriter, r *http.Request) {
 	claims := &jwt.StandardClaims{
 		ExpiresAt: expireTime,
 		Id:        strconv.Itoa(user.ID),
+		Subject:   user.Admin,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
