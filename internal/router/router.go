@@ -9,8 +9,13 @@ import (
 	"fptugo/internal/confession"
 	"fptugo/internal/handlers"
 	"fptugo/internal/user"
+	"fptugo/pkg/middlewares"
 	"fptugo/pkg/websocket"
 )
+
+func tokenRequired(controller http.HandlerFunc) http.Handler {
+	return middlewares.JWTMiddleware().Handler(http.HandlerFunc(controller))
+}
 
 // NewRouter ...
 func NewRouter() *mux.Router {
@@ -34,7 +39,7 @@ func NewRouter() *mux.Router {
 	router.Methods("POST").Path("/auth/new").HandlerFunc(user.CreateNewUser)
 
 	// Users
-	router.Methods("GET").Path("/users").HandlerFunc(user.ListUsers)
+	router.Methods("GET").Path("/users").Handler((tokenRequired(user.ListUsers)))
 
 	// Confession
 	router.Methods("GET").Path("/confessions").HandlerFunc(confession.ListConfessions)
