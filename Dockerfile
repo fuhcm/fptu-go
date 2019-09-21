@@ -5,10 +5,9 @@ RUN mkdir -p /root/src/go
 WORKDIR /root/src/go
 
 COPY go.mod go.sum ./
-RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/fptugo/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod vendor cmd/fptugo/main.go
 
 FROM alpine
 
