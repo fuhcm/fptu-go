@@ -103,18 +103,17 @@ func LoginHandlerWithoutPassword(w http.ResponseWriter, r *http.Request) {
 	authParams := new(Params)
 	req.GetJSONBody(authParams)
 
-	user := user.User{
-		Email: authParams.Email,
-	}
-
-	if err := user.FetchByEmail(); err != nil {
-		res.SendBadRequest("User not found")
+	userData, err := googleoauth.VerifyGoogleOAuth(authParams.Token)
+	if err != nil {
+		res.SendBadRequest("Token Unauthorized")
 		return
 	}
 
-	err := googleoauth.VerifyGoogleOAuth(authParams.Token)
-	if err != nil {
-		res.SendBadRequest("Token Unauthorized")
+	user := user.User{
+		Email: userData.Email,
+	}
+	if err := user.FetchByEmail(); err != nil {
+		res.SendBadRequest("User not found")
 		return
 	}
 

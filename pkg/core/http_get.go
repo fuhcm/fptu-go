@@ -12,7 +12,7 @@ import (
 // HTTPGet ...
 func HTTPGet(url string, token string) (int, []byte) {
 	request, err := http.NewRequest(http.MethodGet, url, nil)
-	request.Header.Add("Authorization", token)
+	request.Header.Add("Authorization", "Bearer "+token)
 	request.Header.Add("Accept", "application/json")
 
 	if err != nil {
