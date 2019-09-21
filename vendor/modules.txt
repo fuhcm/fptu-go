@@ -2,12 +2,25 @@
 github.com/auth0/go-jwt-middleware
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 github.com/dgrijalva/jwt-go
+# github.com/go-redis/redis v6.15.5+incompatible
+github.com/go-redis/redis
+github.com/go-redis/redis/internal
+github.com/go-redis/redis/internal/consistenthash
+github.com/go-redis/redis/internal/hashtag
+github.com/go-redis/redis/internal/pool
+github.com/go-redis/redis/internal/proto
+github.com/go-redis/redis/internal/util
 # github.com/go-sql-driver/mysql v1.4.1
 github.com/go-sql-driver/mysql
 # github.com/gorilla/mux v1.7.3
 github.com/gorilla/mux
 # github.com/gorilla/websocket v1.4.1
 github.com/gorilla/websocket
+# github.com/jinzhu/gorm v1.9.10
+github.com/jinzhu/gorm/dialects/mysql
+github.com/jinzhu/gorm
+# github.com/jinzhu/inflection v1.0.0
+github.com/jinzhu/inflection
 # github.com/jmoiron/sqlx v1.2.0
 github.com/jmoiron/sqlx
 github.com/jmoiron/sqlx/reflectx
@@ -24,10 +37,12 @@ github.com/rs/cors
 github.com/sirupsen/logrus
 # github.com/urfave/negroni v1.0.0
 github.com/urfave/negroni
-# golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586
+# golang.org/x/crypto v0.0.0-20190911031432-227b76d455e7
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
-# golang.org/x/sys v0.0.0-20190606165138-5da285871e9c
+# golang.org/x/sys v0.0.0-20190422165155-953cdadca894
 golang.org/x/sys/unix
-# google.golang.org/appengine v1.6.2
+# google.golang.org/appengine v1.4.0
 google.golang.org/appengine/cloudsql
+# gopkg.in/ezzarghili/recaptcha-go.v2 v2.0.2
+gopkg.in/ezzarghili/recaptcha-go.v2

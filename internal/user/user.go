@@ -1,9 +1,120 @@
 package user
 
+import (
+	"errors"
+	"time"
+
+	"fptugo/configs/db"
+)
+
 // User ...
 type User struct {
-	Name     string `json:"name" db:"name"`
-	Email    string `json:"email" db:"email"`
-	Password string `json:"password" db:"password"`
-	Level    int    `json:"level" db:"level"`
+	ID        int        `json:"id" gorm:"primary_key"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty" sql:"index"`
+
+	Email    string `json:"email" gorm:"not null; type:varchar(250); unique_index"`
+	Password string `json:"password" gorm:"not null; type:varchar(250)"`
+	Admin    string `json:"admin" gorm:"not null;type:boolean"`
+	Nickname string `json:"nickname" gorm:"type:varchar(250);"`
+}
+
+// TableName set User's table name to be `users`
+func (User) TableName() string {
+	return "users"
+}
+
+// FetchAll ...
+func (u *User) FetchAll() []User {
+	db := db.GetDatabaseConnection()
+
+	var users []User
+	db.Find(&users)
+
+	return users
+}
+
+// FetchByID ...
+func (u *User) FetchByID() error {
+	db := db.GetDatabaseConnection()
+
+	if err := db.Where("id = ?", u.ID).Find(&u).Error; err != nil {
+		return errors.New("Could not find the user")
+	}
+
+	return nil
+}
+
+// FetchByEmail ...
+func (u *User) FetchByEmail() error {
+	db := db.GetDatabaseConnection()
+
+	if err := db.Where("email = ?", u.Email).Find(&u).Error; err != nil {
+		return errors.New("Could not find the user")
+	}
+
+	return nil
+}
+
+// FetchEmailByID ...
+func (u *User) FetchEmailByID(userID int) string {
+	db := db.GetDatabaseConnection()
+
+	db.Where("id = ?", userID).Take(&u)
+
+	return u.Email
+}
+
+// FetchNicknameByID ...
+func (u *User) FetchNicknameByID(userID int) string {
+	db := db.GetDatabaseConnection()
+
+	db.Where("id = ?", userID).Take(&u)
+
+	return u.Nickname
+}
+
+// Create ...
+func (u *User) Create() error {
+	db := db.GetDatabaseConnection()
+
+	// Validate record
+	if !db.NewRecord(u) { // => returns `true` as primary key is blank
+		return errors.New("New records can not have primary key id")
+	}
+
+	if err := db.Create(&u).Error; err != nil {
+		return errors.New("Could not create user")
+	}
+
+	return nil
+}
+
+// Save ...
+func (u *User) Save() error {
+	db := db.GetDatabaseConnection()
+
+	if db.NewRecord(u) {
+		if err := db.Create(&u).Error; err != nil {
+			return errors.New("Could not create user")
+		}
+	} else {
+		if err := db.Save(&u).Error; err != nil {
+			return errors.New("Could not update user")
+		}
+	}
+
+	return nil
+}
+
+// Delete ...
+func (u *User) Delete() error {
+	db := db.GetDatabaseConnection()
+
+	if err := db.Delete(&u).Error; err != nil {
+		return errors.New("Could not find the user")
+	}
+
+	return nil
 }

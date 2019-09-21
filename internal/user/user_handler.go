@@ -1,50 +1,107 @@
 package user
 
 import (
-	"fmt"
-	"net/http"
-
-	"fptugo/configs/db"
 	"fptugo/pkg/core"
+	"net/http"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-// ResponseMessage ...
-type ResponseMessage struct {
-	Message string `json:"message"`
+// Response ...
+type Response struct {
+	CreatedAt *time.Time `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+	NickName  string     `json:"nickname"`
+	Resolved  int        `json:"resolved"`
 }
 
-// CreateNewUser ...
-func CreateNewUser(w http.ResponseWriter, r *http.Request) {
+// Hash password
+func hashAndSalt(pwd []byte) string {
+	// Use GenerateFromPassword to hash & salt pwd.
+	// MinCost is just an integer constant provided by the bcrypt
+	// package along with DefaultCost & MaxCost.
+	// The cost can be any value you want provided it isn't lower
+	// than the MinCost (4)
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	if err != nil {
+		// Log error
+	}
+	// GenerateFromPassword returns a byte slice so we need to
+	// convert the bytes to a string and return it
+	return string(hash)
+}
+
+// CreateUserHandler ...
+func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	req := core.Request{ResponseWriter: w, Request: r}
 	res := core.Response{ResponseWriter: w}
 
-	newUser := new(User)
-	req.GetJSONBody(&newUser)
+	user := new(User)
+	req.GetJSONBody(user)
 
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
-	fmt.Printf(string(hashedPassword))
+	// Hash password
+	user.Password = hashAndSalt([]byte(user.Password))
 
-	newUser.Password = string(hashedPassword)
-
-	_, err := db.DB.NamedExec("INSERT INTO users VALUES(null, :name, :email, :password, :level)", newUser)
-	if err != nil {
+	if err := user.Save(); err != nil {
 		res.SendBadRequest(err.Error())
 		return
 	}
 
-	res.SendOK(ResponseMessage{
-		Message: "Success",
-	})
+	res.SendCreated(user)
 }
 
-// ListUsers ...
-func ListUsers(w http.ResponseWriter, r *http.Request) {
+// GetUserByIDHandler ...
+func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
+	req := core.Request{ResponseWriter: w, Request: r}
 	res := core.Response{ResponseWriter: w}
 
-	users := []User{}
-	db.DB.Select(&users, "SELECT name, email, password, level FROM users")
+	id, _ := req.GetVarID()
+	user := User{
+		ID: id,
+	}
 
-	res.SendOK(users)
+	if err := user.FetchByID(); err != nil {
+		res.SendNotFound()
+		return
+	}
+
+	res.SendOK(user)
+}
+
+// UpdateUserHandler ...
+func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
+	req := core.Request{ResponseWriter: w, Request: r}
+	res := core.Response{ResponseWriter: w}
+
+	id, _ := req.GetVarID()
+
+	user := new(User)
+	req.GetJSONBody(user)
+	user.ID = id
+
+	if err := user.Save(); err != nil {
+		res.SendBadRequest(err.Error())
+		return
+	}
+
+	res.SendOK(user)
+}
+
+// DeleteUserHandler ...
+func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
+	req := core.Request{ResponseWriter: w, Request: r}
+	res := core.Response{ResponseWriter: w}
+
+	id, _ := req.GetVarID()
+	user := User{
+		ID: id,
+	}
+
+	if err := user.Delete(); err != nil {
+		res.SendNotFound()
+		return
+	}
+
+	res.SendNoContent()
 }

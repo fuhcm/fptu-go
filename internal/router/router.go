@@ -5,8 +5,9 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"fptugo/internal/authen"
+	"fptugo/internal/auth"
 	"fptugo/internal/confession"
+	"fptugo/internal/crawl"
 	"fptugo/internal/handlers"
 	"fptugo/internal/user"
 	"fptugo/pkg/middlewares"
@@ -33,16 +34,39 @@ func NewRouter() *mux.Router {
 
 	router.Methods("GET").Path("/").HandlerFunc(handlers.GetInfo)
 
-	// Authenticate
-	router.Methods("POST").Path("/auth").HandlerFunc(authen.UsernamePasswordAuthenticate)
-	router.Methods("POST").Path("/auth/oauth").HandlerFunc(authen.TokenAuthenticate)
-	router.Methods("POST").Path("/auth/new").HandlerFunc(user.CreateNewUser)
+	// API Version
+	apiPath := "/api"
+	apiVersion := "/v1"
+	apiPrefix := apiPath + apiVersion
 
-	// Users
-	router.Methods("GET").Path("/users").Handler((tokenRequired(user.ListUsers)))
+	// Auth routes
+	router.Methods("POST").Path("/auth/login").HandlerFunc(auth.LoginHandler)
+	router.Methods("POST").Path("/auth/login_facebook").HandlerFunc(auth.LoginHandlerWithoutPassword)
+
+	// User
+	router.Methods("POST").Path(apiPrefix + "/users").Handler(tokenRequired(user.CreateUserHandler))
+	router.Methods("POST").Path(apiPrefix + "/users").HandlerFunc(user.CreateUserHandler)
+	router.Methods("GET").Path(apiPrefix + "/users/{id}").Handler(tokenRequired(user.GetUserByIDHandler))
+	router.Methods("PUT").Path(apiPrefix + "/users/{id}").Handler(tokenRequired(user.UpdateUserHandler))
+	router.Methods("DELETE").Path(apiPrefix + "/users/{id}").Handler(tokenRequired(user.DeleteUserHandler))
 
 	// Confession
-	router.Methods("GET").Path("/confessions").HandlerFunc(confession.ListConfessions)
+	router.Methods("GET").Path(apiPrefix + "/admincp/confessions").Handler(tokenRequired(confession.GetAllConfessionsHandler))
+	router.Methods("POST").Path(apiPrefix + "/confessions").HandlerFunc(confession.CreateConfessionHandler)
+	router.Methods("POST").Path(apiPrefix + "/myconfess").HandlerFunc(confession.GetConfessionsBySenderHandler)
+	router.Methods("GET").Path(apiPrefix + "/confessions/approved").HandlerFunc(confession.GetApprovedConfessionsHandler)
+	router.Methods("GET").Path(apiPrefix + "/confessions/overview").HandlerFunc(confession.GetConfessionsOverviewHandler)
+	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(tokenRequired(confession.ApproveConfessionHandler))
+	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(tokenRequired(confession.RejectConfessionHandler))
+	router.Methods("GET").Path(apiPrefix + "/confessions/search").HandlerFunc(confession.SearchConfessionsHandler)
+	router.Methods("GET").Path(apiPrefix + "/radios").HandlerFunc(confession.GetRadio)
+	router.Methods("POST").Path(apiPrefix + "/radios").Handler(tokenRequired(confession.SetRadio))
+	router.Methods("POST").Path(apiPrefix + "/push/sync").HandlerFunc(confession.SyncPushIDHandler)
+
+	// Crawl
+	router.Methods("GET").Path("/crawl/{name}").HandlerFunc(crawl.GetHomeFeedHandler)
+	router.Methods("GET").Path("/crawl/{name}/{id}").HandlerFunc(crawl.GetPostFeedHandler)
+	router.Methods("GET").Path("/gist").HandlerFunc(crawl.GetResolveGithubGist)
 
 	return router
 }
