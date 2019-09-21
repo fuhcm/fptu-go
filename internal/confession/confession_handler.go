@@ -11,8 +11,6 @@ import (
 	"fptugo/pkg/core"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/go-redis/redis"
-	"github.com/sirupsen/logrus"
 	recaptcha "gopkg.in/ezzarghili/recaptcha-go.v2"
 )
 
@@ -273,72 +271,4 @@ func SyncPushIDHandler(w http.ResponseWriter, r *http.Request) {
 	confession.SyncPushID(jsonRequest.Sender, jsonRequest.PushID)
 
 	res.SendNoContent()
-}
-
-// RadioType ...
-type RadioType struct {
-	Radios string `json:"radios"`
-}
-
-// GetRedisClient ...
-func GetRedisClient() *redis.Client {
-	return redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_HOST"),
-		Password: os.Getenv("REDIS_PASSWORD"), // no password set
-		DB:       0,                           // use default DB
-	})
-}
-
-// RedisRead ...
-func RedisRead(key string) (string, error) {
-	client := GetRedisClient()
-
-	val, err := client.Get(key).Result()
-	if err != nil {
-		return "", err
-	}
-
-	return val, nil
-}
-
-// RedisWrite ...
-func RedisWrite(key string, value string) error {
-	client := GetRedisClient()
-
-	err := client.Set(key, value, 0).Err()
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// SetRadio ...
-func SetRadio(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
-
-	radioRequest := new(RadioType)
-	req.GetJSONBody(radioRequest)
-
-	err := RedisWrite("radios", radioRequest.Radios)
-	if err != nil {
-		logrus.Println(err.Error())
-	}
-
-	res.SendOK(radioRequest)
-}
-
-// GetRadio ...
-func GetRadio(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
-
-	value, err := RedisRead("radios")
-	if err != nil {
-		logrus.Println(err.Error())
-	}
-
-	radiosObj := RadioType{Radios: value}
-
-	res.SendOK(radiosObj)
 }

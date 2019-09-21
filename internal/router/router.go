@@ -9,6 +9,7 @@ import (
 	"fptugo/internal/confession"
 	"fptugo/internal/crawl"
 	"fptugo/internal/handlers"
+	"fptugo/internal/radio"
 	"fptugo/internal/user"
 	"fptugo/pkg/middlewares"
 	"fptugo/pkg/websocket"
@@ -59,14 +60,16 @@ func NewRouter() *mux.Router {
 	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(tokenRequired(confession.ApproveConfessionHandler))
 	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(tokenRequired(confession.RejectConfessionHandler))
 	router.Methods("GET").Path(apiPrefix + "/confessions/search").HandlerFunc(confession.SearchConfessionsHandler)
-	router.Methods("GET").Path(apiPrefix + "/radios").HandlerFunc(confession.GetRadio)
-	router.Methods("POST").Path(apiPrefix + "/radios").Handler(tokenRequired(confession.SetRadio))
 	router.Methods("POST").Path(apiPrefix + "/push/sync").HandlerFunc(confession.SyncPushIDHandler)
 
 	// Crawl
 	router.Methods("GET").Path("/crawl/{name}").HandlerFunc(crawl.GetHomeFeedHandler)
 	router.Methods("GET").Path("/crawl/{name}/{id}").HandlerFunc(crawl.GetPostFeedHandler)
 	router.Methods("GET").Path("/gist").HandlerFunc(crawl.GetResolveGithubGist)
+
+	// Radio
+	router.Methods("GET").Path(apiPrefix + "/radios").HandlerFunc(radio.GetRadio)
+	router.Methods("POST").Path(apiPrefix + "/radios").Handler(tokenRequired(radio.SetRadio))
 
 	return router
 }
