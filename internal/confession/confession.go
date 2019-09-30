@@ -110,14 +110,21 @@ func (c *Confession) FetchOverview() (int, int, int) {
 }
 
 // FetchApprovedConfession ...
-func (c *Confession) FetchApprovedConfession(lastestID int) []Confession {
+func (c *Confession) FetchApprovedConfession(lastestID int, isAuthenticated bool) []Confession {
 	db := db.GetDatabaseConnection()
+
+	var isAuthenticatedQueryStr string
+	if isAuthenticated {
+		isAuthenticatedQueryStr = "and status = 2"
+	} else {
+		isAuthenticatedQueryStr = ""
+	}
 
 	var confessions []Confession
 	if lastestID == 0 {
-		db.Where("status = 1").Order("id desc").Limit(10).Find(&confessions)
+		db.Where("status = 1" + isAuthenticatedQueryStr).Order("id desc").Limit(10).Find(&confessions)
 	} else {
-		db.Where("id < ? and status = 1", lastestID).Order("id desc").Limit(10).Find(&confessions)
+		db.Where("id < ? and status = 1"+isAuthenticatedQueryStr, lastestID).Order("id desc").Limit(10).Find(&confessions)
 	}
 
 	return confessions

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fptugo/pkg/core"
+	"strings"
 )
 
 // TokenResponse ...
@@ -27,4 +28,9 @@ func VerifyGoogleOAuth(token string) (TokenResponse, error) {
 	}
 
 	return userData, nil
+}
+
+// IsFPTEduEmail ...
+func IsFPTEduEmail(email string) bool {
+	return strings.Contains(email, "fpt.edu.vn")
 }

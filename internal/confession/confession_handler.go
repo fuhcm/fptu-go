@@ -119,8 +119,24 @@ func GetApprovedConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 		latestID = 0
 	}
 
+	// IsAuthenticated => Fetch approved and rejected confessions
+	var isAuthenticated bool
+	isAuthenticatedStr := r.URL.Query().Get("isAuthenticated")
+	if isAuthenticatedStr == "true" {
+		isAuthenticated = true
+	} else {
+		isAuthenticated = false
+	}
+
 	confession := new(Confession)
-	confessions := confession.FetchApprovedConfession(latestID)
+
+	var confessions []Confession
+	if isAuthenticated {
+		confessions = confession.FetchApprovedConfession(latestID, true)
+	} else {
+		confessions = confession.FetchApprovedConfession(latestID, false)
+	}
+
 	collection := confessionsResponseResolve(confessions)
 	res.SendOK(collection)
 }
