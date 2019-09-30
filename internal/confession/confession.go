@@ -115,7 +115,7 @@ func (c *Confession) FetchApprovedConfession(lastestID int, isAuthenticated bool
 
 	var isAuthenticatedQueryStr string
 	if isAuthenticated {
-		isAuthenticatedQueryStr = "OR status = 2"
+		isAuthenticatedQueryStr = " OR status = 2"
 	} else {
 		isAuthenticatedQueryStr = ""
 	}
