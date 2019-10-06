@@ -1,7 +1,7 @@
 package user
 
 import (
-	"fptugo/pkg/core"
+	"fptugo/pkg/utils"
 	"net/http"
 	"time"
 
@@ -34,8 +34,8 @@ func hashAndSalt(pwd []byte) string {
 
 // CreateUserHandler ...
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	user := new(User)
 	req.GetJSONBody(user)
@@ -53,8 +53,8 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 // GetUserByIDHandler ...
 func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	id, _ := req.GetVarID()
 	user := User{
@@ -71,8 +71,8 @@ func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 // UpdateUserHandler ...
 func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	id, _ := req.GetVarID()
 
@@ -90,8 +90,8 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 // DeleteUserHandler ...
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	id, _ := req.GetVarID()
 	user := User{

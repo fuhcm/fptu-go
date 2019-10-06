@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"fptugo/internal/user"
-	"fptugo/pkg/core"
+	"fptugo/pkg/utils"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	recaptcha "gopkg.in/ezzarghili/recaptcha-go.v2"
@@ -76,7 +76,7 @@ func GetAllConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 		numLoad = 10
 	}
 
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 	confession := new(Confession)
 	confessions := confession.FetchAll(numLoad)
 
@@ -97,8 +97,8 @@ func GetConfessionsBySenderHandler(w http.ResponseWriter, r *http.Request) {
 		numLoad = 10
 	}
 
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	confession := new(Confession)
 	tokenRequest := new(requestConfessionBySenderRequest)
@@ -111,7 +111,7 @@ func GetConfessionsBySenderHandler(w http.ResponseWriter, r *http.Request) {
 
 // GetApprovedConfessionsHandler ...
 func GetApprovedConfessionsHandler(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 
 	// Number of element to query
 	latestID, err := strconv.Atoi(r.URL.Query().Get("latest_id"))
@@ -150,8 +150,8 @@ type newConfessionRequest struct {
 
 // CreateConfessionHandler ...
 func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	newConfession := new(newConfessionRequest)
 	req.GetJSONBody(newConfession)
@@ -195,7 +195,7 @@ type Overview struct {
 
 // GetConfessionsOverviewHandler ...
 func GetConfessionsOverviewHandler(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 
 	confession := new(Confession)
 	totalConfess, pendingConfess, rejectedConfess := confession.FetchOverview()
@@ -210,8 +210,8 @@ func GetConfessionsOverviewHandler(w http.ResponseWriter, r *http.Request) {
 
 // ApproveConfessionHandler ...
 func ApproveConfessionHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	approverID := getUserIDFromHeader(r)
 	approveConfession := new(Confession)
@@ -233,8 +233,8 @@ type RejectConfessionRequest struct {
 
 // RejectConfessionHandler ...
 func RejectConfessionHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	approverID := getUserIDFromHeader(r)
 	rejectConfessionRequest := new(RejectConfessionRequest)
@@ -252,7 +252,7 @@ func RejectConfessionHandler(w http.ResponseWriter, r *http.Request) {
 
 // SearchConfessionsHandler ...
 func SearchConfessionsHandler(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 
 	// Number of element to query
 	keyword := r.URL.Query().Get("q")
@@ -277,8 +277,8 @@ type SyncPushIDRequest struct {
 
 // SyncPushIDHandler ...
 func SyncPushIDHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	jsonRequest := new(SyncPushIDRequest)
 	req.GetJSONBody(jsonRequest)

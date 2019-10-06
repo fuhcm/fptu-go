@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"fptugo/pkg/core"
+	"fptugo/pkg/utils"
 )
 
 // Info ...
@@ -14,7 +14,7 @@ type Info struct {
 
 // GetInfo ...
 func GetInfo(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 	res.SendOK(Info{
 		Name:    "fptugo",
 		Version: "0.0.0",

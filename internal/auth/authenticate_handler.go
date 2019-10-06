@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"fptugo/internal/user"
-	"fptugo/pkg/core"
+	"fptugo/pkg/utils"
 	googleoauth "fptugo/third_party/google_oauth"
 
 	"github.com/dgrijalva/jwt-go"
@@ -46,8 +46,8 @@ func comparePasswords(hashedPwd string, plainPwd []byte) bool {
 
 // LoginHandler ...
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	authParams := new(Params)
 	req.GetJSONBody(authParams)
@@ -98,8 +98,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 // LoginHandlerWithoutPassword ...
 func LoginHandlerWithoutPassword(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 	authParams := new(Params)
 	req.GetJSONBody(authParams)
 

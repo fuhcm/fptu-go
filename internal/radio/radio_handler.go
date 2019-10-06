@@ -2,7 +2,7 @@ package radio
 
 import (
 	"fptugo/configs/redis"
-	"fptugo/pkg/core"
+	"fptugo/pkg/utils"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
@@ -10,8 +10,8 @@ import (
 
 // SetRadio ...
 func SetRadio(w http.ResponseWriter, r *http.Request) {
-	req := core.Request{ResponseWriter: w, Request: r}
-	res := core.Response{ResponseWriter: w}
+	req := utils.Request{ResponseWriter: w, Request: r}
+	res := utils.Response{ResponseWriter: w}
 
 	radioRequest := new(Radio)
 	req.GetJSONBody(radioRequest)
@@ -26,7 +26,7 @@ func SetRadio(w http.ResponseWriter, r *http.Request) {
 
 // GetRadio ...
 func GetRadio(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 
 	value, err := redis.Get("radios")
 	if err != nil {

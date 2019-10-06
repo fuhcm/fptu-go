@@ -3,7 +3,7 @@ package googleoauth
 import (
 	"encoding/json"
 	"errors"
-	"fptugo/pkg/core"
+	"fptugo/pkg/utils"
 	"strings"
 )
 
@@ -18,7 +18,7 @@ type TokenResponse struct {
 // VerifyGoogleOAuth ...
 func VerifyGoogleOAuth(token string) (TokenResponse, error) {
 	googleAuthURL := "https://www.googleapis.com/userinfo/v2/me"
-	statusCode, body := core.HTTPGet(googleAuthURL, token)
+	statusCode, body := utils.HTTPGet(googleAuthURL, token)
 
 	userData := TokenResponse{}
 	json.Unmarshal(body, &userData)

@@ -12,7 +12,7 @@ import (
 	"time"
 
 	cacheConfig "fptugo/configs/cache"
-	"fptugo/pkg/core"
+	"fptugo/pkg/utils"
 
 	"github.com/gorilla/mux"
 )
@@ -220,7 +220,7 @@ func getDataFromSite(name string) []Item {
 
 // GetHomeFeedHandler ...
 func GetHomeFeedHandler(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 	vars := mux.Vars(r)
 	name := vars["name"]
 
@@ -241,7 +241,7 @@ func GetHomeFeedHandler(w http.ResponseWriter, r *http.Request) {
 
 // GetPostFeedHandler ...
 func GetPostFeedHandler(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 	vars := mux.Vars(r)
 	name := vars["name"]
 	id := vars["id"]
@@ -265,7 +265,7 @@ func GetPostFeedHandler(w http.ResponseWriter, r *http.Request) {
 
 // GetResolveGithubGist ...
 func GetResolveGithubGist(w http.ResponseWriter, r *http.Request) {
-	res := core.Response{ResponseWriter: w}
+	res := utils.Response{ResponseWriter: w}
 	url := r.URL.Query().Get("url")
 
 	resp, err := http.Get(url)
