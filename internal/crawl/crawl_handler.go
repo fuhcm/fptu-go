@@ -24,8 +24,7 @@ var MediumURLs = []string{"https://codeburst.io",
 	"https://medium.com/javascript-scene",
 	"https://blog.logrocket.com/",
 	"https://itnext.io/",
-	"https://towardsdatascience.com",
-	"https://blog.learngoprogramming.com/"}
+	"https://towardsdatascience.com"}
 
 // FPTURLs ...
 var FPTURLs = []string{"https://daihoc.fpt.edu.vn"}
